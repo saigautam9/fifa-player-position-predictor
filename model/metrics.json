@@ -1,0 +1,31 @@
+{
+  "accuracy": 0.8264,
+  "n_samples": 17107,
+  "features": [
+    "pace",
+    "stamina",
+    "shooting",
+    "passing",
+    "finishing",
+    "defending",
+    "tackling",
+    "defense_strength",
+    "attack_to_defense_ratio"
+  ],
+  "classes": [
+    "Forward",
+    "Midfielder",
+    "Defender"
+  ],
+  "importance": {
+    "attack_to_defense_ratio": 0.31,
+    "tackling": 0.1319,
+    "defense_strength": 0.1121,
+    "finishing": 0.1061,
+    "defending": 0.085,
+    "shooting": 0.0804,
+    "passing": 0.0778,
+    "pace": 0.0684,
+    "stamina": 0.0284
+  }
+}
