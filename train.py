@@ -119,10 +119,12 @@ def main() -> None:
 
     pred = clf.predict(X_te.values)
     acc = accuracy_score(y_te, pred)
+    report = classification_report(y_te, pred, target_names=CLASSES, digits=3, output_dict=True)
+    cm = confusion_matrix(y_te, pred)
     print(f"\n[train] test accuracy = {acc:.4f}\n")
     print(classification_report(y_te, pred, target_names=CLASSES, digits=3))
     print("confusion matrix (rows=true, cols=pred):")
-    print(confusion_matrix(y_te, pred))
+    print(cm)
 
     importances = sorted(
         zip(FEATURES, clf.feature_importances_), key=lambda t: -t[1]
@@ -137,9 +139,23 @@ def main() -> None:
     )
     metrics = {
         "accuracy": round(float(acc), 4),
+        "macro_f1": round(float(report["macro avg"]["f1-score"]), 4),
+        "weighted_f1": round(float(report["weighted avg"]["f1-score"]), 4),
         "n_samples": int(len(X)),
+        "n_train": int(len(X_tr)),
+        "n_test": int(len(X_te)),
         "features": FEATURES,
         "classes": CLASSES,
+        "per_class": {
+            c: {
+                "precision": round(float(report[c]["precision"]), 3),
+                "recall": round(float(report[c]["recall"]), 3),
+                "f1": round(float(report[c]["f1-score"]), 3),
+                "support": int(report[c]["support"]),
+            }
+            for c in CLASSES
+        },
+        "confusion_matrix": cm.tolist(),
         "importance": {n: round(float(i), 4) for n, i in importances},
     }
     (OUT / "metrics.json").write_text(json.dumps(metrics, indent=2))

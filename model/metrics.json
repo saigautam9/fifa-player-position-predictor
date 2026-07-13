@@ -1,6 +1,10 @@
 {
   "accuracy": 0.8264,
+  "macro_f1": 0.8239,
+  "weighted_f1": 0.8256,
   "n_samples": 17107,
+  "n_train": 13685,
+  "n_test": 3422,
   "features": [
     "pace",
     "stamina",
@@ -16,6 +20,43 @@
     "Forward",
     "Midfielder",
     "Defender"
+  ],
+  "per_class": {
+    "Forward": {
+      "precision": 0.759,
+      "recall": 0.852,
+      "f1": 0.803,
+      "support": 736
+    },
+    "Midfielder": {
+      "precision": 0.818,
+      "recall": 0.746,
+      "f1": 0.78,
+      "support": 1407
+    },
+    "Defender": {
+      "precision": 0.877,
+      "recall": 0.901,
+      "f1": 0.889,
+      "support": 1279
+    }
+  },
+  "confusion_matrix": [
+    [
+      627,
+      107,
+      2
+    ],
+    [
+      199,
+      1049,
+      159
+    ],
+    [
+      0,
+      127,
+      1152
+    ]
   ],
   "importance": {
     "attack_to_defense_ratio": 0.31,

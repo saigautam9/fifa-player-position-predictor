@@ -5,7 +5,7 @@ An interactive demo that predicts a football player's best-fit outfield position
 confidence score for each class. Move the sliders (or pick a preset like *Striker*
 or *Playmaker*) and the model classifies the player instantly.
 
-**Live demo:** _(Streamlit Community Cloud link goes here once deployed)_
+### 🔗 Live demo → **[fifa-player-position-predictor.streamlit.app](https://fifa-player-position-predictor-8yklyqsvsavrpwepjnmzfd.streamlit.app/)**
 
 ## The model
 
@@ -25,6 +25,56 @@ project design):
 
 `attack_to_defense_ratio` turns out to be the model's most important single
 feature.
+
+## Evaluation
+
+All numbers below are produced by `python train.py` and written to
+[`model/metrics.json`](model/metrics.json). Trained on **13,685** players,
+evaluated on a held-out **3,422**-player test set (80/20 stratified split, seed 42).
+
+| Metric | Score |
+| --- | --- |
+| Accuracy | **82.6%** |
+| Macro F1 | **0.824** |
+| Weighted F1 | **0.826** |
+
+### Per-class
+
+| Class | Precision | Recall | F1 | Support |
+| --- | --- | --- | --- | --- |
+| ⚽ Forward | 0.759 | 0.852 | **0.803** | 736 |
+| 🎯 Midfielder | 0.818 | 0.746 | **0.780** | 1,407 |
+| 🛡️ Defender | 0.877 | 0.901 | **0.889** | 1,279 |
+
+### Confusion matrix (rows = actual, cols = predicted)
+
+| | → Forward | → Midfielder | → Defender |
+| --- | --- | --- | --- |
+| **Forward** | 627 | 107 | 2 |
+| **Midfielder** | 199 | 1049 | 159 |
+| **Defender** | 0 | 127 | 1152 |
+
+The errors are football-sensible: Forwards and Defenders are almost never
+confused (only 2 of 736 Forwards mislabelled Defender), and the residual
+confusion sits on the Midfielder boundary — the role that genuinely overlaps
+with both attack and defence.
+
+### Feature importance
+
+| Feature | Importance |
+| --- | --- |
+| `attack_to_defense_ratio` | **0.310** |
+| tackling | 0.132 |
+| `defense_strength` | 0.112 |
+| finishing | 0.106 |
+| defending | 0.085 |
+| shooting | 0.080 |
+| passing | 0.078 |
+| pace | 0.068 |
+| stamina | 0.028 |
+
+The engineered `attack_to_defense_ratio` is the single strongest predictor —
+validating the original project's feature design.
 
 ## Note on the model
 
